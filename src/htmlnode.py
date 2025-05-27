@@ -1,4 +1,6 @@
 class HTMLNode():
+    # props is to be a dictionar of key:value pairs
+    ## ex. {"href": "https://boot.dev"}
     def __init__(self, tag=None, value=None, children=None, props=None):
         self.tag = tag
         self.value = value
