@@ -37,13 +37,14 @@ def split_nodes_image(old_nodes):
         for image in images_nodes:
             image_fstring = f"![{image[0]}]({image[1]})"
             sectioned = text_remaining.split(image_fstring)
+            if len(sectioned) != 2:
+                raise ValueError('illegal; image section not closed')
             if sectioned[0] != "":
                 new_nodes.append(TextNode(sectioned[0], TextType.TEXT))
-            if sectioned[1] != "" and len(sectioned[1].split(image_fstring)) != 1:
-                new_nodes.append(TextNode(sectioned[1], TextType.TEXT))
-            elif sectioned[1] != "":
-                text_remaining = sectioned[1]
+            text_remaining = sectioned[1]
             new_nodes.append(TextNode(image[0], TextType.IMAGE, image[1]))
+        if text_remaining != '':
+            new_nodes.append(TextNode(text_remaining, TextType.TEXT))
     return new_nodes
 
 def split_nodes_link(old_nodes):
@@ -60,34 +61,27 @@ def split_nodes_link(old_nodes):
         for link in links_nodes:
             link_fstring = f"[{link[0]}]({link[1]})"
             sectioned = text_remaining.split(link_fstring)
-            # as far as I can tell, I need to find a way to get the order of link, such that if the first entry is the link then that's printed first
+            if len(sectioned) != 2:
+                raise ValueError('illegal; link section not closed')
             if sectioned[0] != "":
                 new_nodes.append(TextNode(sectioned[0], TextType.TEXT))
-            if sectioned[1] != "" and len(sectioned[1].split(link_fstring)) != 1:
-                new_nodes.append(TextNode(sectioned[1], TextType.TEXT))
-            elif sectioned[1] != "":
-                text_remaining = sectioned[1]
+            text_remaining = sectioned[1]
             new_nodes.append(TextNode(link[0], TextType.LINK, link[1]))
+        if text_remaining != '':
+            new_nodes.append(TextNode(text_remaining, TextType.TEXT))
     return new_nodes
 
 def extract_markdown_images(text):
-    return re.findall(r"\!\[(.*?)\]\((.*?)\)", text)
+    return re.findall(r"\!\[([^\]]*)\]\(([^\]]*)\)", text)
 
 def extract_markdown_links(text):
-    return re.findall(r"(?<!!)\[(.*?)\]\((.*?)\)", text)
+    return re.findall(r"(?<!!)\[([^\]]*)\]\(([^\]]*)\)", text)
 
 def text_to_text_nodes(text):
     text_to_node = [TextNode(text, TextType.TEXT)]
-    #print(f"test link node:__{split_nodes_link(text_to_node)}")
-    #print(f"test image node:__{split_nodes_image(text_to_node)}")
     to_bold = split_nodes_delimiter(text_to_node, "**", TextType.BOLD)
-    #print(f"test link node:_bold_{split_nodes_link(to_bold)}")
     to_italics = split_nodes_delimiter(to_bold, '_', TextType.ITALICS)
-    #print(f"test link node:_italics_{split_nodes_link(to_italics)}")
     to_code = split_nodes_delimiter(to_italics, '`', TextType.CODE)
-    #print(f"test link node:_code_{split_nodes_link(to_code)}")
     to_link = split_nodes_link(to_code)
-    print(f"link test: {to_link}")
     to_image = split_nodes_image(to_link)
-    print(f"image test: {to_image}")
     return to_image
