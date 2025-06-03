@@ -1,5 +1,4 @@
 import unittest
-import re
 
 from block_markdown import BlockType, block_to_block_type, markdown_to_blocks
 
@@ -47,7 +46,7 @@ blocks = markdown_to_blocks(md)
 # 6 code
 # 7 out of order ordered list
 
-class TestBlockTypePositive(unittest.TestCase):
+class TestBlockType(unittest.TestCase):
     def test_paragraph_block(self):
         block_type = block_to_block_type(blocks[0])
         self.assertEqual(block_type,
