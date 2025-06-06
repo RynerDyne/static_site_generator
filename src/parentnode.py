@@ -13,7 +13,9 @@ class ParentNode(HTMLNode):
         else:
             html_txt = ''
             for child in self.children:
-                html_txt += child.to_html()
+                assert isinstance(child, HTMLNode)
+                child_to_html = child.to_html()
+                html_txt += str(child_to_html)
             return f"<{self.tag}>{html_txt}</{self.tag}>"
 
     def __repr__(self):

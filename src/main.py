@@ -1,7 +1,7 @@
-from textnode import TextNode, TextType
+from source_to_destination import source_to_destination
+
 
 def main():
-    name = TextNode("created test text", TextType.LINK, "http://boot.dev")
-    print(name)
+    source_to_destination('./static/', './public/')
 
 main()
