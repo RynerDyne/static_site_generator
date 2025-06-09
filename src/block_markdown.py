@@ -34,9 +34,9 @@ def block_to_block_type(markdown_block):
         for split_line in split_markdown_block:
             first = split_line[0]
             if first == str(count):
+                count += 1
                 if count == len(split_markdown_block):
                     return BlockType.ORDERED_LIST
-                count += 1
             else:
                 return BlockType.PARAGRAPH
 

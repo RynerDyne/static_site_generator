@@ -78,11 +78,11 @@ def ordered_list_blocks_to_html_node(block):
     order_count = 1
     ordered_list_lines = block.split('\n')
     ordered_list_nodes = []
-    for i in range(0,len(ordered_list_lines)-2):
-        line = ordered_list_lines[i+1].strip()
+    for i in range(0,len(ordered_list_lines)):
+        line = ordered_list_lines[i].strip()
         if str(order_count) != line[0][0]:
             return paragraph_block_to_html_node(block)
-        ordered_list_text = f"{line[3:]}\n"
+        ordered_list_text = f"{line[3:]}"
         ordered_list_nodes.append(ParentNode('li', list_line_to_html_node(ordered_list_text)))
         order_count += 1
     return ParentNode('ol', ordered_list_nodes)
@@ -97,7 +97,7 @@ def unordered_list_block_to_html_node(block):
         elif line[0] != '-':
             return paragraph_block_to_html_node(block)
         line = line.lstrip('- ')
-        line_text = f"{line}\n"
+        line_text = f"{line}"
         unordered_list_nodes.append(ParentNode('li', list_line_to_html_node(line_text)))
     return ParentNode('ul', unordered_list_nodes)
 

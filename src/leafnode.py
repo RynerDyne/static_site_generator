@@ -11,6 +11,8 @@ class LeafNode(HTMLNode):
         elif self.tag is None:
             return f"{self.value}"
         else:
+            if self.props != None and self.tag == 'a':
+                return f"<{self.tag} href=\"{self.props['href']}\">{self.value}</{self.tag}>"
             return f"<{self.tag}>{self.value}</{self.tag}>"
 
     def __repr__(self):
