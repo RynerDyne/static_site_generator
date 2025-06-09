@@ -1,9 +1,15 @@
+import sys
+
 from generate_pages import generate_pages_recursive
 from source_to_destination import source_to_destination
 
 
 def main():
-    source_to_destination('./static/', './public/')
-    generate_pages_recursive('./content/', './template.html', './public/')
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
+    else:
+        basepath = '/'
+    source_to_destination('./static/', './docs/')
+    generate_pages_recursive('./content/', './template.html', './docs/', basepath)
 
 main()
